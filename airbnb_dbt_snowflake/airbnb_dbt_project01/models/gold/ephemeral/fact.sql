@@ -9,12 +9,12 @@
     {
         'table': ref('dim_listings'),
         'alias': 'gold_listings',
-        'join_condition': 'gold_obt.listing_id = gold_listings.listing_id AND gold_obt.created_at >= gold_listings.dbt_valid_from AND gold_obt.created_at < gold_listings.dbt_valid_to'  -- ← ADDED TEMPORAL FILTERS HERE
+        'join_condition': 'gold_obt.listing_id = gold_listings.listing_id AND gold_obt.created_at >= gold_listings.dbt_valid_from AND gold_obt.created_at < gold_listings.dbt_valid_to'
     },
     {
         'table': ref('dim_hosts'),
         'alias': 'gold_hosts',
-        'join_condition': 'gold_listings.host_id = gold_hosts.host_id AND gold_obt.created_at >= gold_hosts.dbt_valid_from AND gold_obt.created_at < gold_hosts.dbt_valid_to',  -- ← ADDED TEMPORAL FILTERS HERE
+        'join_condition': 'gold_listings.host_id = gold_hosts.host_id AND gold_obt.created_at >= gold_hosts.dbt_valid_from AND gold_obt.created_at < gold_hosts.dbt_valid_to',
         'exclude_columns': ['host_id', 'created_at']
     }
 ] %}
@@ -25,9 +25,9 @@ FROM
     {{ ref('obt') }} AS gold_obt
     LEFT JOIN {{ ref('dim_listings') }} AS gold_listings
         ON gold_obt.listing_id = gold_listings.listing_id
-        AND gold_obt.created_at >= gold_listings.dbt_valid_from  -- ← HERE
-        AND gold_obt.created_at < gold_listings.dbt_valid_to     -- ← HERE
+        AND gold_obt.created_at >= gold_listings.dbt_valid_from  
+        AND gold_obt.created_at < gold_listings.dbt_valid_to     
     LEFT JOIN {{ ref('dim_hosts') }} AS gold_hosts
         ON gold_listings.host_id = gold_hosts.host_id
-        AND gold_obt.created_at >= gold_hosts.dbt_valid_from    -- ← HERE
-        AND gold_obt.created_at < gold_hosts.dbt_valid_to       -- ← HERE
+        AND gold_obt.created_at >= gold_hosts.dbt_valid_from    
+        AND gold_obt.created_at < gold_hosts.dbt_valid_to       
