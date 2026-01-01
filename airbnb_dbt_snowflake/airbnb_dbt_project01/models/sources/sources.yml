@@ -1,0 +1,12 @@
+sources:
+  - name: staging_schema
+    database: airbnb_db  
+    schema: staging_schema
+    tables:
+      - name: bookings
+      - name : hosts
+      - name : listings
+
+  - name: stripe
+    tables:
+      - name: payments

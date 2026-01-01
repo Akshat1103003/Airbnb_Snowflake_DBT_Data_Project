@@ -1,0 +1,1 @@
+select * from airbnb_db.staging_schema.listings
