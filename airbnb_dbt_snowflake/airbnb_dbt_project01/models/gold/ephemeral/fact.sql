@@ -9,12 +9,12 @@
     {
         'table': ref('dim_listings'),
         'alias': 'gold_listings',
-        'join_condition': 'gold_obt.listing_id = gold_listings.listing_id'
+        'join_condition': 'gold_obt.listing_id = gold_listings.listing_id AND gold_obt.created_at >= gold_listings.dbt_valid_from AND gold_obt.created_at < gold_listings.dbt_valid_to'  -- ← ADDED TEMPORAL FILTERS HERE
     },
     {
         'table': ref('dim_hosts'),
         'alias': 'gold_hosts',
-        'join_condition': 'gold_listings.host_id = gold_hosts.host_id',
+        'join_condition': 'gold_listings.host_id = gold_hosts.host_id AND gold_obt.created_at >= gold_hosts.dbt_valid_from AND gold_obt.created_at < gold_hosts.dbt_valid_to',  -- ← ADDED TEMPORAL FILTERS HERE
         'exclude_columns': ['host_id', 'created_at']
     }
 ] %}
@@ -22,11 +22,12 @@
 SELECT
     {{ fact_config[0]['columns'] }}
 FROM
-    {% for config in fact_config %}
-        {% if loop.first %}
-            {{ config['table'] }} AS {{ config['alias'] }}
-        {% else %}
-            LEFT JOIN {{ config['table'] }} AS {{ config['alias'] }}
-            ON {{ config['join_condition'] }}
-        {% endif %}
-    {% endfor %}
+    {{ ref('obt') }} AS gold_obt
+    LEFT JOIN {{ ref('dim_listings') }} AS gold_listings
+        ON gold_obt.listing_id = gold_listings.listing_id
+        AND gold_obt.created_at >= gold_listings.dbt_valid_from  -- ← HERE
+        AND gold_obt.created_at < gold_listings.dbt_valid_to     -- ← HERE
+    LEFT JOIN {{ ref('dim_hosts') }} AS gold_hosts
+        ON gold_listings.host_id = gold_hosts.host_id
+        AND gold_obt.created_at >= gold_hosts.dbt_valid_from    -- ← HERE
+        AND gold_obt.created_at < gold_hosts.dbt_valid_to       -- ← HERE
