@@ -1,4 +1,4 @@
-# 🏠 Airbnb End-to-End Data Engineering Project
+# 🏡 Airbnb End-to-End Data Engineering Project
 
 **Repository:** `Airbnb_Snowflake_DBT_Data_Project`
 
