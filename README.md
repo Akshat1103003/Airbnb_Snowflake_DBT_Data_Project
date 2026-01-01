@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-This project implements a complete **end-to-end data engineering pipeline** for Airbnb data using modern cloud technologies. It demonstrates best practices in **data warehousing, transformation, and analytics** using **Snowflake**, **dbt (Data Build Tool)**, and **AWS**.
+This project implements a complete **end-to-end data engineering pipeline** for Airbnb data using modern cloud technologies. It demonstrates best practices **data warehousing, transformation, and analytics** using **Snowflake**, **dbt (Data Build Tool)**, and **AWS (S3 Bucket)**.
 
 The pipeline processes Airbnb **listings, bookings, and hosts** data through a **medallion architecture (Bronze → Silver → Gold)**, implementing **incremental loading**, **Slowly Changing Dimensions (SCD Type 2)**, and **analytics-ready datasets**.
 
@@ -149,6 +149,7 @@ AWS_DBT_Snowflake/
     └── seeds/                          # Static reference data```
 
 ---
+```
 
 ## 🎯 Key Features
 
@@ -173,7 +174,6 @@ dbt sources provide a single source of truth:
 ```sql
 FROM {{ source('staging', 'bookings') }}  -- ✅ traceable
 ```
-
 **Production value**
 
 * Protects downstream models from upstream schema changes
